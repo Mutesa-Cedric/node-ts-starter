@@ -64,123 +64,125 @@ export const updatePassword = async (req: Request, res: Response) => {
         })
     }
 }
-export const sendVerificationCode=async(req:Request,res:Response)=>{
+export const sendVerificationCode = async (req: Request, res: Response) => {
     try {
-        const {email}=req.body;
-        if(!email){
+        const { email } = req.body;
+        if (!email) {
             return res.status(400).json({
-                message:"Email is required"
+                message: "Email is required"
             })
         }
 
-        const user=await User.findOne({email:email});
-        if(!user){
+        const user = await User.findOne({ email: email });
+        if (!user) {
             return res.status(404).json({
-                message:"Invalid Email"
+                message: "Invalid Email"
             })
         };
         // generate verification code of 6 digits
-        let verificationCode=Math.floor(100000 + Math.random() * 900000);
-        user.verificationCode!.code=verificationCode.toString();
-        user.verificationCode!.expiresAt=new Date(Date.now()+10*60*1000);
+        let verificationCode = Math.floor(100000 + Math.random() * 900000);
+        user.verificationCode!.code = verificationCode.toString();
+        user.verificationCode!.expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
         await user.save();
-        const {sent}=await sendEmail(
-            email,verificationCode.toString()
-        );
-        if(sent){
+        const { sent } = await sendEmail({
+            to: email,
+            body: `your verification code is : ${verificationCode.toString()}`,
+            subject: " Verify your account"
+        });
+        if (sent) {
             res.status(200).json({
-                message:"success"
+                message: "success"
             });
         }
-        else{
+        else {
             res.status(500).json({
-                message:"Failed to send verification code"
+                message: "Failed to send verification code"
             })
         }
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            message:"Internal server error"
+            message: "Internal server error"
         })
     }
 }
 
 
-export const validateVerificationCode=async(req:Request,res:Response)=>{
+export const validateVerificationCode = async (req: Request, res: Response) => {
     try {
-        const {code,email}=req.body;
-        if(!code||!email){
+        const { code, email } = req.body;
+        if (!code || !email) {
             return res.status(400).json({
-                missingFields:{
-                    code:!code ?"missing":"present",
-                    email:!email ?"missing":"present"
+                missingFields: {
+                    code: !code ? "missing" : "present",
+                    email: !email ? "missing" : "present"
                 }
             })
         }
 
-        const user=await User.findOne({email:email});
-        if(!user){
+        const user = await User.findOne({ email: email });
+        if (!user) {
             return res.status(404).json({
-                message:"Invalid email "
+                message: "Invalid email "
             })
         }
         // check if code has expired
         // @ts-ignore
-        if(user.verificationCode!.expiresAt.getTime()<Date.now()){
+        if (user.verificationCode!.expiresAt.getTime() < Date.now()) {
             return res.status(400).json({
-                expired:true,
-                message:"Verification code has expired"
+                expired: true,
+                message: "Verification code has expired"
             })
         }
-        if(user.verificationCode!.code!==code){
+        if (user.verificationCode!.code !== code) {
             return res.status(400).json({
-                invalidCode:true,
-                message:"Invalid verification code"
+                invalidCode: true,
+                message: "Invalid verification code"
             })
         }
-        user.verificationCode!.code="default";
-        user.verificationCode!.expiresAt=new Date(0);
+        user.verificationCode!.code = "default";
+        user.verificationCode!.expiresAt = new Date(0);
 
         await user.save();
 
         res.status(200).json({
-            message:"success"
+            message: "success"
         });
-        
+
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            message:"Internal server error"
+            message: "Internal server error"
         })
     }
 }
 
-export const resetPassword=async(req:Request,res:Response)=>{
+export const resetPassword = async (req: Request, res: Response) => {
     try {
-        const {email,password}=req.body;
-        if(!email||!password){
+        const { email, password } = req.body;
+        if (!email || !password) {
             return res.status(400).json({
-                missingFields:{
-                    email:!email ?"missing":"present",
-                    password:!password ?"missing":"present"
+                missingFields: {
+                    email: !email ? "missing" : "present",
+                    password: !password ? "missing" : "present"
                 }
             })
         }
-        const user=await User.findOne({email:email});
-        if(!user){
+        const user = await User.findOne({ email: email });
+        if (!user) {
             return res.status(404).json({
-                message:"Invalid email"
+                message: "Invalid email"
             })
         }
-        user.password=password;
+        user.password = password;
         await user.save();
-        
+
         res.status(200).json({
-            message:"success"
+            message: "success"
         });
     } catch (error) {
         console.log(error)
-        
+
     }
 }
