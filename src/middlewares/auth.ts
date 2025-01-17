@@ -1,23 +1,23 @@
-import { Request, Response, NextFunction } from "express"
-import { verifyToken } from "../utils/jwt";
+import { Request, Response, NextFunction } from 'express';
+import { verifyToken } from '../utils/jwt';
 
 const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
-    const token = req.cookies.token;
+  const token = req.cookies.token;
 
-    // check if token is valid
-    if (!token) {
-        return res.status(401).json({ message: "Unauthorized" });
-    }
+  // check if token is valid
+  if (!token) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
 
-    // verify token
-    const payload = verifyToken(token);
+  // verify token
+  const payload = verifyToken(token);
 
-    // check if payload is valid
-    if (!payload) {
-        return res.status(401).json({ message: "Unauthorized" });
-    }
+  // check if payload is valid
+  if (!payload) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
 
-    next();
+  next();
 };
 
 export default isAuthenticated;

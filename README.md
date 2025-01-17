@@ -14,7 +14,7 @@
 - [X] Folder structure
 - [X] Documentation (coming soon)
 - [X] Testing (coming soon)
-- [X] Docker (coming soon)
+- [X] Docker
 
 
 ## Clone the repo

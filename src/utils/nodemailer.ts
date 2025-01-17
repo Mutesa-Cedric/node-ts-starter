@@ -1,21 +1,25 @@
-import nodemailer = require("nodemailer");
+import nodemailer = require('nodemailer');
 
 interface IResponse {
   error?: string;
   sent?: boolean;
 }
 
-export const sendEmail = async ({ to, subject, body }: {
-  to: string,
-  subject: string,
-  body: string
+export const sendEmail = async ({
+  to,
+  subject,
+  body,
+}: {
+  to: string;
+  subject: string;
+  body: string;
 }): Promise<IResponse> => {
   let sent: boolean = false;
   let error: string | undefined = undefined;
 
   try {
     const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",// your mail server. ex : smtp.hostinger.com
+      host: 'smtp.gmail.com', // your mail server. ex : smtp.hostinger.com
       port: 587,
       secure: false,
       auth: {
@@ -39,7 +43,7 @@ export const sendEmail = async ({ to, subject, body }: {
     };
 
     await transporter.sendMail(mailOptions);
-    console.log("Email sent");
+    console.log('Email sent');
     sent = true;
   } catch (err: any) {
     console.log(err);

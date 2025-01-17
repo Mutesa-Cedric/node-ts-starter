@@ -1,1 +1,3 @@
-// some custom helper functions here.
+export const generateVerificationCode = () => {
+  return Math.floor(100000 + Math.random() * 900000);
+};
