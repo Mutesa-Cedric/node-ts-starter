@@ -9,11 +9,10 @@
 ## Features
 
 - [x] Authentication
-- [x] Email verification
+- [x] Emails
 - [X] Cors
-- [X] Folder structure
-- [X] Documentation (coming soon)
-- [X] Testing (coming soon)
+- [X] Module Based Folder structure
+- [X] Documentation 
 - [X] Docker
 
 
