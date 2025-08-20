@@ -6,5 +6,8 @@
     "rootDir": "./",
     "strict": true,
     "noImplicitAny": false
+  },
+  "ts-node": {
+    "files": true
   }
 }
