@@ -19,7 +19,6 @@ const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
   if (!payload) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
-  // @ts-ignore
   req.userId = payload.id;
 
   next();

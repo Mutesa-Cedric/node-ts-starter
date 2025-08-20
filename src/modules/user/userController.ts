@@ -128,9 +128,13 @@ export default class UserController {
           message: 'Invalid email ',
         });
       }
+      if (!user.verificationCode) {
+        return res.status(400).json({
+          message: 'No verification code found',
+        });
+      }
       // check if code has expired
-      // @ts-ignore
-      if (user.verificationCode!.expiresAt.getTime() < Date.now()) {
+      if (!user.verificationCode || !user.verificationCode.expiresAt || user.verificationCode.expiresAt.getTime() < Date.now()) {
         return res.status(400).json({
           expired: true,
           message: 'Verification code has expired',
